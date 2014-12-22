@@ -1,0 +1,10 @@
+function getcurkart [x_new,y_new] = [x_momentan,y_momentan,x,y]
+
+moveNorm = norm([x-x_momentan,y - y_momentan]);
+moveAng = tan([x-x_momentan,y - y_momentan]);
+
+x_new = x - moveAng * c
+
+
+
+end
