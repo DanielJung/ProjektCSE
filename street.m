@@ -16,7 +16,7 @@ classdef street
     
     methods
         function this=street(x, y, dt)
-            [x, y] = this.filterPoints(x, y, 5);
+            [x, y] = this.filterPoints(x, y, 0);
             this.Time           = 0:length(x)-1;
             this.DeltaT         = dt;
             this.CurTime        = 0;
@@ -41,39 +41,8 @@ classdef street
             this.frame  = this.frame+v;
             
         end
-        function [t, x, y, xr, yr, xl, yl] = getRouting(this, numSteps, width)
-%             t = 0;
-%             x = 0;
-%             y = 0;
-%             xr = 0;
-%             yr = 0;
-%             xl = 0;
-%             yl = 0;            
-%             
-%             while t<this.Time(end)
-%                 x = [x, evalSpline(this.CoeffMatX, this.Time, t)];
-%                 y = [y, evalSpline(this.CoeffMatY, this.Time, t)];
-%                 
-%                 dx = evalSpline(this.dCoeffMatX, this.Time, t);
-%                 dy = evalSpline(this.dCoeffMatY, this.Time, t);
-%                 
-%                 Berechne rechten Rand
-%                 xy = [0;0];
-%                 xy(1, 1) = dy;
-%                 xy(2, 1) = -dx;
-%                 xy = xy/norm(xy)*width/2;
-%                 
-%                 xr = [xr, x(i, 1)+xy(1, 1)];
-%                 yr = [yr, y(i, 1)+xy(2, 1)];
-%                 
-%                 Berechne linken Rand
-%                 xy(1, 1) = -dy;
-%                 xy(2, 1) = dx;
-%                 xy = xy/norm(xy)*width/2;
-%                 
-%                 xl = [xl, x(i, 1)+xy(1, 1)];
-%                 yl = [yl, y(i, 1)+xy(2, 1)];
-%             end
+        function [t, x, y, xr, yr, xl, yl] = getRouting(this, width)
+            numSteps = max(this.Time)/this.DeltaT;
             t = linspace(0, max(this.Time), numSteps);
             x = zeros(numSteps, 1);
             xr = zeros(numSteps, 1);
@@ -89,8 +58,8 @@ classdef street
                     x(i, 1) = evalSpline(this.CoeffMatX, this.Time, t(i));
                     y(i, 1) = evalSpline(this.CoeffMatY, this.Time, t(i));
                 else
-                    x(i, 1) = x(i-1)+this.DeltaT*dx/numSteps*t(end);
-                    y(i, 1) = y(i-1)+this.DeltaT*dy/numSteps*t(end);
+                    x(i, 1) = x(i-1)+this.DeltaT*dx;
+                    y(i, 1) = y(i-1)+this.DeltaT*dy;
                 end
                 
                 
@@ -139,13 +108,13 @@ classdef street
             x = zeros(n, 1);
             y = zeros(n, 1);
             for i=1:n/2  % Bäume rechts der Straße
-                t = rand()*this.Time(end) % Zufälliger Zeitpunkt
+                t = rand()*this.Time(end); % Zufälliger Zeitpunkt
                 
                 tx = evalSpline(this.CoeffMatX, this.Time, t);  % Position auf der Straße
-                ty = evalSpline(this.CoeffMatX, this.Time, t);
+                ty = evalSpline(this.CoeffMatY, this.Time, t);
                 
                 dx = evalSpline(this.dCoeffMatX, this.Time, t);  % Ableitung an der Stelle
-                dy = evalSpline(this.dCoeffMatX, this.Time, t);
+                dy = evalSpline(this.dCoeffMatY, this.Time, t);
                 
                 %Berechne rechten Rand
                 xy = [0;0];
@@ -154,16 +123,16 @@ classdef street
                 xy = xy/norm(xy);
                 
                 x(i) = tx+xy(1, 1)*(dist+rand()*width/2);
-                y(i) = ty+xy(1, 1)*(dist+rand()*width/2);
+                y(i) = ty+xy(2, 1)*(dist+rand()*width/2);
             end
             for i=(n/2+1):n % Bäume links der Straße
                 t = rand()*this.Time(end); % Zufälliger Zeitpunkt
                 
                 tx = evalSpline(this.CoeffMatX, this.Time, t);  % Position auf der Straße
-                ty = evalSpline(this.CoeffMatX, this.Time, t);
+                ty = evalSpline(this.CoeffMatY, this.Time, t);
                 
                 dx = evalSpline(this.dCoeffMatX, this.Time, t);  % Ableitung an der Stelle
-                dy = evalSpline(this.dCoeffMatX, this.Time, t);
+                dy = evalSpline(this.dCoeffMatY, this.Time, t);
                 
                 %Berechne linken Rand
                 xy = [0;0];
@@ -172,7 +141,7 @@ classdef street
                 xy = xy/norm(xy);
                 
                 x(i) = tx+xy(1, 1)*(dist+rand()*width/2);
-                y(i) = ty+xy(1, 1)*(dist+rand()*width/2);
+                y(i) = ty+xy(2, 1)*(dist+rand()*width/2);
             end
         end
         function [dx, dy] = getDerivative(this, numSteps)
