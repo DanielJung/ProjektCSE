@@ -46,7 +46,7 @@ function this = openWorld(this)
              vrdrawnow;
          end
 function this= placeNodes(this)   
-    [~,~,~,neu,neu2,~,~] = this.s.getRouting(this.Baumanzahl,0.4);
+    [~,~,~,neu,neu2,~,~] = this.s.getRouting(0.4);
            
  for i = 1:this.Baumanzahl
                tree = vrnode(this.world,strcat('tree',num2str(i))); 
