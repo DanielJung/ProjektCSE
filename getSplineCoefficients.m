@@ -1,7 +1,7 @@
 function [ CoeffMat ] = getSplineCoefficients( t, y, dfa, dfb)
 
 if(length(t)~=length(y))
-    error('y and y must match together');
+    error('y and t must match together');
 end
 
 m = length(t);
