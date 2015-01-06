@@ -7,7 +7,7 @@ classdef street
         dCoeffMatY  % Coefficient-Matrix for derivate Y
         Time        % Time-Interval
         DeltaT      % Time-Step
-        numSteps    % Number of Steps
+        NumSteps    % Number of Steps
         CurTime     % Current Time
         CurPos      % Current Position
         Rotation    % Current Rotation
@@ -16,15 +16,13 @@ classdef street
     
     methods
         function this=street(x, y, dt)
-            [x, y] = this.filterPoints(x, y, 0);
             this.Time           = 0:length(x)-1;
             this.DeltaT         = dt;
             this.CurTime        = 0;
-            this.numSteps       = (length(this.Time)-1)/this.DeltaT;
+            this.NumSteps       = (length(this.Time)-1)/this.DeltaT;
             this.CurPos(1)      = x(1);
             this.CurPos(2)      = y(1);
             this.frame          = 1;
-            
             this.CoeffMatX      = getSplineCoefficients(this.Time, x, 0, 0);
             this.CoeffMatY      = getSplineCoefficients(this.Time, y, 0, 0);
             
@@ -32,7 +30,7 @@ classdef street
             this.dCoeffMatY     = diffCoeffMat(this.CoeffMatY);
         end
         function this=step(this, v)
-            this.CurTime = this.CurTime + this.DeltaT;
+            this.CurTime = this.CurTime + this.DeltaT*v;
             dx = evalSpline(this.dCoeffMatX, this.Time, this.CurTime);
             dy = evalSpline(this.dCoeffMatY, this.Time, this.CurTime);
             this.CurPos(1) = this.CurPos(1)+v*this.DeltaT*dx;
@@ -41,28 +39,26 @@ classdef street
             this.frame  = this.frame+v;
             
         end
-        function [t, x, y, xr, yr, xl, yl] = getRouting(this, width)
-           % max(this.Time)
-           % numSteps = max(this.Time)/this.DeltaT;
-            t = linspace(0, max(this.Time), this.numSteps);
-            x = zeros(this.numSteps, 1);
-            xr = zeros(this.numSteps, 1);
-            xl = zeros(this.numSteps, 1);
-            y = zeros(this.numSteps, 1);
-            yr = zeros(this.numSteps, 1);
-            yl = zeros(this.numSteps, 1);
+        function [t, x, y, xr, yr, xl, yl] = getRouting(this,  width)
+            t = linspace(0, max(this.Time), this.NumSteps);
+            x = zeros(this.NumSteps, 1);
+            xr = zeros(this.NumSteps, 1);
+            xl = zeros(this.NumSteps, 1);
+            y = zeros(this.NumSteps, 1);
+            yr = zeros(this.NumSteps, 1);
+            yl = zeros(this.NumSteps, 1);
+            alpha = zeros(this.NumSteps,1);
             for i=1:length(t)
+                x(i, 1) = evalSpline(this.CoeffMatX, this.Time, t(i));
+                y(i, 1) = evalSpline(this.CoeffMatY, this.Time, t(i));
+                
                 dx = evalSpline(this.dCoeffMatX, this.Time, t(i));
                 dy = evalSpline(this.dCoeffMatY, this.Time, t(i));
-                
-                if i==1
-                    x(i, 1) = evalSpline(this.CoeffMatX, this.Time, t(i));
-                    y(i, 1) = evalSpline(this.CoeffMatY, this.Time, t(i));
-                else
-                    x(i, 1) = x(i-1)+this.DeltaT*dx;
-                    y(i, 1) = y(i-1)+this.DeltaT*dy;
-                end
-                
+                %Winkel berenchen
+                xy(1, 1) = x(i);
+                xy(2, 1) = y(i);
+                xy = xy/norm(xy);
+                e_y=[0 1];
                 
                 %Berechne rechten Rand
                 xy = [0;0];
@@ -85,17 +81,7 @@ classdef street
         function [x] = getPosition2D(this)
             x = [this.CurPos(1), this.CurPos(2)];
         end
-        function [x, y] = filterPoints(this, ox, oy, minDist)
-            x = ox(1);
-            y = oy(1);
-            
-            for i=2:length(ox)
-                if sqrt((ox(i)-x(end))^2+(oy(i)-y(end))^2)>minDist % Abstand größer als Mindestabstand => Übernehme Koordinate
-                    x = [x, ox(i)];
-                    y = [y, oy(i)];
-                end
-            end
-        end
+        
         function [x] = getPosition(this)
             x = [this.CurPos(1), 0.03, this.CurPos(2)];
         end
@@ -104,6 +90,16 @@ classdef street
         end
         function [b] = getFrame(this)
                 b = this.frame;
+        end
+            
+        function [dx, dy] = getDerivative(this, numSteps)
+            t = linspace(0, max(this.Time), numSteps);
+            dx = zeros(numSteps, 1);
+            dy = zeros(numSteps, 1);
+            for i=1:length(t)
+                dx(i) = evalSpline(this.dCoeffMatX, this.Time, t(i));
+                dy(i) = evalSpline(this.dCoeffMatY, this.Time, t(i));
+            end
         end
         function [x, y] = getRandomPoints(this, n, dist, width)
             x = zeros(n, 1);
@@ -145,16 +141,17 @@ classdef street
                 y(i) = ty+xy(2, 1)*(dist+rand()*width/2);
             end
         end
-        function [dx, dy] = getDerivative(this, numSteps)
-            t = linspace(0, max(this.Time), numSteps);
-            dx = zeros(numSteps, 1);
-            dy = zeros(numSteps, 1);
-            for i=1:length(t)
-                dx(i) = evalSpline(this.dCoeffMatX, this.Time, t(i));
-                dy(i) = evalSpline(this.dCoeffMatY, this.Time, t(i));
+        function [x, y] = filterPoints(this, ox, oy, minDist)
+            x = ox(1);
+            y = oy(1);
+            
+            for i=2:length(ox)
+                if sqrt((ox(i)-x(end))^2+(oy(i)-y(end))^2)>minDist % Abstand größer als Mindestabstand => Übernehme Koordinate
+                    x = [x, ox(i)];
+                    y = [y, oy(i)];
+                end
             end
         end
-     
     
 end
 end
