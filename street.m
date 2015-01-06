@@ -7,7 +7,7 @@ classdef street
         dCoeffMatY  % Coefficient-Matrix for derivate Y
         Time        % Time-Interval
         DeltaT      % Time-Step
-        NumSteps    % Number of Steps
+        numSteps    % Number of Steps
         CurTime     % Current Time
         CurPos      % Current Position
         Rotation    % Current Rotation
@@ -20,7 +20,7 @@ classdef street
             this.Time           = 0:length(x)-1;
             this.DeltaT         = dt;
             this.CurTime        = 0;
-            this.NumSteps       = (length(this.Time)-1)/this.DeltaT;
+            this.numSteps       = (length(this.Time)-1)/this.DeltaT;
             this.CurPos(1)      = x(1);
             this.CurPos(2)      = y(1);
             this.frame          = 1;
@@ -42,14 +42,15 @@ classdef street
             
         end
         function [t, x, y, xr, yr, xl, yl] = getRouting(this, width)
-            numSteps = max(this.Time)/this.DeltaT;
-            t = linspace(0, max(this.Time), numSteps);
-            x = zeros(numSteps, 1);
-            xr = zeros(numSteps, 1);
-            xl = zeros(numSteps, 1);
-            y = zeros(numSteps, 1);
-            yr = zeros(numSteps, 1);
-            yl = zeros(numSteps, 1);
+           % max(this.Time)
+           % numSteps = max(this.Time)/this.DeltaT;
+            t = linspace(0, max(this.Time), this.numSteps);
+            x = zeros(this.numSteps, 1);
+            xr = zeros(this.numSteps, 1);
+            xl = zeros(this.numSteps, 1);
+            y = zeros(this.numSteps, 1);
+            yr = zeros(this.numSteps, 1);
+            yl = zeros(this.numSteps, 1);
             for i=1:length(t)
                 dx = evalSpline(this.dCoeffMatX, this.Time, t(i));
                 dy = evalSpline(this.dCoeffMatY, this.Time, t(i));
