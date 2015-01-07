@@ -1,6 +1,6 @@
 
 
-A = xlsread('VonUnibisRatio.xlsx','Tabelle3');
+A = xlsread('VonUnibisRatio.xlsx','Tabelle4');
 x=A(1:10:end,1);
 y=A(1:10:end,2);
 

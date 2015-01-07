@@ -6,13 +6,13 @@ classdef Sensorik
     
      end
    methods
-        function this = Sensorik(laenge,oeffnungswinkel,schrittweite)
+       
+function this = Sensorik(laenge,oeffnungswinkel,schrittweite)
             this.laenge = laenge;
             this.oeffnungswinkel = oeffnungswinkel;
             this.schrittweite = schrittweite;
            
         end
-
 function [x2,y2,x1,y1,zx2,zy2,zx1,zy1]=  Sensordarstellung(this);
         %% zx2,zy2,zx1,zy1 Kreisausschnitt ohne "Deckel" 
         %% x2,y2,x1,y1   Kreissegmentkoordninaten
@@ -93,8 +93,8 @@ if (abs(obj_x(j)) <= abs(xmax2)) && (obj_y(j) <= ymax ) && (ymax2 <= obj_y(j))
     
 
 end
- x_det =  x_det(x_det~=0);   
- y_det =  y_det(y_det~=0);   
+ x_det =  x_det(1:z-1) 
+ y_det =  y_det(1:z-1)  
 end
 
 end

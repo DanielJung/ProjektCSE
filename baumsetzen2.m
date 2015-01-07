@@ -9,3 +9,4 @@ g= graphics('roadtest1',5,x,y,0.001);
 g.openWorld();
 g.placeNodes();
 g.movecar('Mercedes_S');
+
