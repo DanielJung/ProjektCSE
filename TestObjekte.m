@@ -29,8 +29,8 @@ for i = 1:10000
   ver=Nullverschiebung(curr(1),curr(2),xr,yr,xl,yl,s.getFrame()); %Klasse aufrufen
   [xr_new,yr_new,xl_new,yl_new] = ver.centerStreet(1000); % neue Straﬂe ermitteln (Koordinaten)
   [obj_newx,obj_newy] = ver.centerOther(obj(1,:),obj(2,:)); %neue Objekte ermitteln (Koordinaten)
-  [x_det,y_det] = sens.detection(obj_newx,obj_newy,x1,y1,zx1,zy1); %detection
-  [x_det2,y_det2] = sens2.detection(obj_newx,obj_newy,x12,y12,zx12,zy12); %detection
+  [x_det,y_det] = sens.detection(obj_newx,obj_newy); %detection
+  [x_det2,y_det2] = sens2.detection(obj_newx,obj_newy); %detection
   hold on
   hplot = plot(xl_new,yl_new,'g*',xr_new,yr_new,'g*',obj_newx,obj_newy,'r*',x_det,y_det,'bx',x_det2,y_det2,'bx'); % plot
   
@@ -44,7 +44,7 @@ for i = 1:10000
   drawnow; 
   delete(hplot);
 
-  s=s.step(15);
+  s=s.step(5);
 end
 
 

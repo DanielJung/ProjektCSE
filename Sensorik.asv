@@ -51,7 +51,12 @@ function [x2,y2,x1,y1,zx2,zy2,zx1,zy1]=  Sensordarstellung(this);
         
 
         end
-function [x_det,y_det] = detection(this,obj_x,obj_y)
+function [x_det,y_det] = detection(this,obj_x,obj_y,x1,y1,zx1,zy1)
+
+% ymax = max(abs(y1));
+% ymax2 = max(abs(zy1));
+% xmax2 = max(abs(zx1));
+
 %% Detektionsvektor erstellen
 x_det = zeros(length(obj_x),1);
 y_det = zeros(length(obj_y),1);
@@ -59,18 +64,48 @@ y_det = zeros(length(obj_y),1);
 
 [obj_phi,obj_r] = cart2pol(obj_x,obj_y);
 
-obj_phi = obj_phi.*180./pi;
-
-z=1;
 for i = 1:length(obj_x)
-if (obj_r(i) <= this.laenge) && (abs(90-obj_phi(i))<= this.oeffnungswinkel)
+if (obj_r(i) <= this.laenge) und (abs(obj_phi(i))<= thsi.oeffnungswinkel)
     
-   [x_det(z),y_det(z)] = pol2cart(obj_phi(i)*pi/180,obj_r(i));
-   z=z+1;
+   [x_det,y_det] =
    
+    
 end
 
 
+
+% %% In Dreieck ohne Kreissegment detektieren
+% z=1; 
+% for j=1:length(obj_x)
+% if (abs(obj_x(j)) <= abs(xmax2)) && (abs(obj_y(j)) <= abs(ymax2))
+%     
+%       for i =1:length(zy1)
+%          if (abs(zy1(i)-obj_y(j))< 0.05)
+%              if (abs(obj_x(j)) < abs(zx1(i))) 
+%                 x_det(z) = obj_x(j);
+%                 y_det(z) = obj_y(j);
+%                  z=z+1;
+%              end
+%          end                     
+%       end
+%   
+%     
+% end
+% %% Kreissegment detektieren
+% if (abs(obj_x(j)) <= abs(xmax2)) && (obj_y(j) <= ymax ) && (ymax2 <= obj_y(j))
+%     for i =1:length(y1)
+%         if (abs(y1(i)-obj_y(j))< 0.05) 
+%             if(abs(obj_x(j)) <= abs(x1(i)))
+%            
+%              x_det(z) = obj_x(j);
+%              y_det(z) = obj_y(j);
+%              z=z+1;
+%             end
+%         end
+%     end
+%     
+% 
+% end
  x_det =  x_det(1:z-1); 
  y_det =  y_det(1:z-1);  
 end
