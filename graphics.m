@@ -58,12 +58,21 @@ function this= placeNodes(this)
 function this = movecar(this,carname)
      
       car = vrnode(this.world,carname);
-                 %Fahren lassen des Autos            
- for i=1:this.s.NumSteps
-    this.s = this.s.step(1);
+       RadVR = vrnode(this.world,'Rad_vr');
+       RadHR = vrnode(this.world,'Rad_hr');
+       RadVL = vrnode(this.world,'Rad_vl');
+       RadHL = vrnode(this.world,'Rad_hl');
+                 %Fahren lassen des Autos     
+                 a=5;
+ for i=1:this.s.NumSteps/a
+    this.s = this.s.step(a);
     
     car.translation = this.s.getPosition();
     car.rotation = [0 -1 0 this.s.getRotation()];
+    RadVR.rotation = [0 0 1 -this.s.getRadRotation()];
+    RadHR.rotation = [0 0 1 -this.s.getRadRotation()];
+    RadVL.rotation = [0 0 1 -this.s.getRadRotation()];
+    RadHL.rotation = [0 0 1 -this.s.getRadRotation()];
     vrdrawnow;
   
  end

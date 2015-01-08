@@ -8,6 +8,7 @@ classdef street
         Time        % Time-Interval
         DeltaT      % Time-Step
         NumSteps    % Number of Steps
+        RadRotation % Rotationvom Rad
         CurTime     % Current Time
         CurPos      % Current Position
         Rotation    % Current Rotation
@@ -25,7 +26,7 @@ classdef street
             this.frame          = 1;
             this.CoeffMatX      = getSplineCoefficients(this.Time, x, 0, 0);
             this.CoeffMatY      = getSplineCoefficients(this.Time, y, 0, 0);
-            
+            this.RadRotation    = 0;
             this.dCoeffMatX     = diffCoeffMat(this.CoeffMatX);
             this.dCoeffMatY     = diffCoeffMat(this.CoeffMatY);
         end
@@ -37,6 +38,10 @@ classdef street
             this.CurPos(2) = this.CurPos(2)+v*this.DeltaT*dy;
             this.Rotation = atan2(dy, dx)-pi;
             this.frame  = this.frame+v;
+             this.RadRotation = this.RadRotation +v ;
+            if  (this.RadRotation == 360)
+                this.RadRotation = 0;
+            end
             
         end
         function [t, x, y, xr, yr, xl, yl] = getRouting(this,  width)
@@ -83,10 +88,13 @@ classdef street
         end
         
         function [x] = getPosition(this)
-            x = [this.CurPos(1), 0.03, this.CurPos(2)];
+            x = [this.CurPos(1), 0.2590, this.CurPos(2)];
         end
         function [a] = getRotation(this)
             a = this.Rotation;
+        end
+         function [radr] = getRadRotation(this)
+            radr = this.RadRotation;
         end
         function [b] = getFrame(this)
                 b = this.frame;
