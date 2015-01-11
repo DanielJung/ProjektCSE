@@ -4,6 +4,7 @@ classdef graphics
      s              %Straﬂenklasse
      WRLdateiname   %Name der WRLdatei 'roadtest1'
      world          %VRworld
+   
       end
      methods
             
@@ -12,6 +13,7 @@ function this = graphics(wrldateiname,Baumanzahl,x,y,dt)
              this.s = street(x,y,dt);
              this.WRLdateiname = wrldateiname;
              this.world = vrworld(wrldateiname);
+             
          end
 function this = puttrees(this)
             
@@ -38,7 +40,20 @@ function this = puttrees(this)
             
             
             h.saveas('C:\Users\jonas_000\Documents\MATLAB\PROJEKT CSE\9.12.2014');
-         end
+end
+
+         
+function this = placeNodes2(this,xzuf,yzuf)   
+    %[this.xzuf,this.yzuf] = this.s.getRandomPoints(100,100,100) % HIER getrandompoints verwenden
+           
+ for i = 1:500
+               tree = vrnode(this.world,strcat('baumtree',num2str(i))); 
+               %tree.scale = [0.02 0.02 0.02];
+               tree.translation = [xzuf(i) 1 yzuf(i)];
+               
+               
+ end
+end
 function this = openWorld(this)
            
             open(this.world);
@@ -48,13 +63,13 @@ function this = openWorld(this)
 function this= placeNodes(this)   
     [~,~,~,neu,neu2,~,~] = this.s.getRouting(0.4);
            
- for i = 1:this.Baumanzahl
+ for i = 1:100
                tree = vrnode(this.world,strcat('tree',num2str(i))); 
                tree.scale = [0.02 0.02 0.02];
                tree.translation = [neu(i) 0.1 neu2(i)];
                vrdrawnow;
  end
-         end
+end
 function this = movecar(this,carname)
      
       car = vrnode(this.world,carname);
@@ -63,7 +78,7 @@ function this = movecar(this,carname)
        RadVL = vrnode(this.world,'Rad_vl');
        RadHL = vrnode(this.world,'Rad_hl');
                  %Fahren lassen des Autos     
-                 a=5;
+                 a=20;
  for i=1:this.s.NumSteps/a
     this.s = this.s.step(a);
     

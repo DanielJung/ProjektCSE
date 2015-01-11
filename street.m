@@ -38,7 +38,7 @@ classdef street
             this.CurPos(2) = this.CurPos(2)+v*this.DeltaT*dy;
             this.Rotation = atan2(dy, dx)-pi;
             this.frame  = this.frame+v;
-             this.RadRotation = this.RadRotation +v ;
+             this.RadRotation = this.RadRotation +2*v ;
             if  (this.RadRotation == 360)
                 this.RadRotation = 0;
             end
