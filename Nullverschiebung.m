@@ -2,17 +2,17 @@ classdef Nullverschiebung
      properties (GetAccess=public)
        x_curr % Momentanposition Auto X
        y_curr % Momentanposition Auto Y
-       x_bezug % Bezugspunkt (rechter straßenrand) X
-       y_bezug % Bezugspunkt (rechter straßenrand) Y
+       x_bezug % Bezugspunkt (rechter straï¿½enrand) X
+       y_bezug % Bezugspunkt (rechter straï¿½enrand) Y
        frame % bei welchem frame es gerade ist
-       xr  %Straße rechts X
-       yr   %Straße rechts Y
-       xl   %Straße links X
-       yl   %Straße links Y
+       xr  %Straï¿½e rechts X
+       yr   %Straï¿½e rechts Y
+       xl   %Straï¿½e links X
+       yl   %Straï¿½e links Y
          
      end
    methods
-       function this = Nullverschiebung(x_curr,y_curr,xr,yr,xl,yl,frame)
+       function this = Nullverschiebung(x_curr,y_curr,xr,yr,xl,yl,frame,xbez,ybez)
            this.x_curr = x_curr;
            this.y_curr = y_curr;
            this.xr = xr;
@@ -20,7 +20,7 @@ classdef Nullverschiebung
            this.xl = xl;
            this.yl = yl;
            this.frame = frame;
-           [this.x_bezug,this.y_bezug] = this.getShift(x_curr,y_curr,this.xr(this.frame),this.yr(this.frame));
+           [this.x_bezug,this.y_bezug] = this.getShift(x_curr,y_curr,xbez,ybez);
        
            
        end
@@ -62,7 +62,7 @@ classdef Nullverschiebung
       end
        
       function [xr_gedr,yr_gedr,xl_gedr,yl_gedr] = centerStreet(this,n)
-         % n = anzahl der berechneten Straßenpunkte
+         % n = anzahl der berechneten Straï¿½enpunkte
           
           %%Vektoren erstellen
             xl_new = zeros(n,1);

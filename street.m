@@ -12,7 +12,7 @@ classdef street
         CurTime     % Current Time
         CurPos      % Current Position
         Rotation    % Current Rotation
-        frame       % an welcher Stelle der Straße befindet man sich (Nummer der koordinate)
+        frame       % an welcher Stelle der Straï¿½e befindet man sich (Nummer der koordinate)
     end
     
     methods
@@ -86,9 +86,24 @@ classdef street
         function [x] = getPosition2D(this)
             x = [this.CurPos(1), this.CurPos(2)];
         end
-        
         function [x] = getPosition(this)
             x = [this.CurPos(1), 0.2590, this.CurPos(2)];
+        end
+        function [x, y] = getRightLimit(this)
+            tx = evalSpline(this.CoeffMatX, this.Time, this.CurTime);  % Position auf der Straï¿½e
+            ty = evalSpline(this.CoeffMatY, this.Time, this.CurTime);
+
+            dx = evalSpline(this.dCoeffMatX, this.Time, this.CurTime);  % Ableitung an der Stelle
+            dy = evalSpline(this.dCoeffMatY, this.Time, this.CurTime);
+
+            %Berechne rechten Rand
+            xy = [0;0];
+            xy(1, 1) = dy;
+            xy(2, 1) = -dx;
+            xy = xy/norm(xy);
+
+            x = tx+xy(1, 1);
+            y = ty+xy(2, 1);
         end
         function [a] = getRotation(this)
             a = this.Rotation;
@@ -99,7 +114,6 @@ classdef street
         function [b] = getFrame(this)
                 b = this.frame;
         end
-            
         function [dx, dy] = getDerivative(this, numSteps)
             t = linspace(0, max(this.Time), numSteps);
             dx = zeros(numSteps, 1);
@@ -112,10 +126,10 @@ classdef street
         function [x, y] = getRandomPoints(this, n, dist, width)
             x = zeros(n, 1);
             y = zeros(n, 1);
-            for i=1:n/2  % Bäume rechts der Straße
-                t = rand()*this.Time(end); % Zufälliger Zeitpunkt
+            for i=1:n/2  % Bï¿½ume rechts der Straï¿½e
+                t = rand()*this.Time(end); % Zufï¿½lliger Zeitpunkt
                 
-                tx = evalSpline(this.CoeffMatX, this.Time, t);  % Position auf der Straße
+                tx = evalSpline(this.CoeffMatX, this.Time, t);  % Position auf der Straï¿½e
                 ty = evalSpline(this.CoeffMatY, this.Time, t);
                 
                 dx = evalSpline(this.dCoeffMatX, this.Time, t);  % Ableitung an der Stelle
@@ -130,10 +144,10 @@ classdef street
                 x(i) = tx+xy(1, 1)*(dist+rand()*width/2);
                 y(i) = ty+xy(2, 1)*(dist+rand()*width/2);
             end
-            for i=(n/2+1):n % Bäume links der Straße
-                t = rand()*this.Time(end); % Zufälliger Zeitpunkt
+            for i=(n/2+1):n % Bï¿½ume links der Straï¿½e
+                t = rand()*this.Time(end); % Zufï¿½lliger Zeitpunkt
                 
-                tx = evalSpline(this.CoeffMatX, this.Time, t);  % Position auf der Straße
+                tx = evalSpline(this.CoeffMatX, this.Time, t);  % Position auf der Straï¿½e
                 ty = evalSpline(this.CoeffMatY, this.Time, t);
                 
                 dx = evalSpline(this.dCoeffMatX, this.Time, t);  % Ableitung an der Stelle
@@ -154,7 +168,7 @@ classdef street
             y = oy(1);
             
             for i=2:length(ox)
-                if sqrt((ox(i)-x(end))^2+(oy(i)-y(end))^2)>minDist % Abstand größer als Mindestabstand => Übernehme Koordinate
+                if sqrt((ox(i)-x(end))^2+(oy(i)-y(end))^2)>minDist % Abstand grï¿½ï¿½er als Mindestabstand => ï¿½bernehme Koordinate
                     x = [x, ox(i)];
                     y = [y, oy(i)];
                 end
