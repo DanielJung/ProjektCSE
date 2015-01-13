@@ -15,7 +15,7 @@ sens = Sensorik(2.9,23,0.01); %Sensorobjekt hinzufügen
 sens2 = Sensorik(1.5,60,0.01); %Sensorobjekt hinzufügen
 [x2,y2,x1,y1,zx2,zy2,zx1,zy1] = sens.Sensordarstellung(); % Kreisbogen erstellen
 [x22,y22,x12,y12,zx22,zy22,zx12,zy12] = sens2.Sensordarstellung();
-kreisplot = plot (0,0,'g*',x1,y1,'r*',x2,y2,'r*',zx1,zy1,'r*',zx2,zy2,'r*',x12,y12,'r*',x22,y22,'r*',zx12,zy12,'r*',zx22,zy22,'r*'); % kreisbogen plotten
+kreisplot = plot (x1,y1,'r',x2,y2,'r',zx1,zy1,'r',zx2,zy2,'r',x12,y12,'r',x22,y22,'r',zx12,zy12,'r',zx22,zy22,'r'); % kreisbogen plotten
 %kreisplot2 = plot (0,0,'g*',x12,y12,'r*',x22,y22,'r*',zx12,zy12,'r*',zx22,zy22,'r*'); % kreisbogen plotten
 axis([-3 3 0 3]);
  uistack(kreisplot) %kreisbogen in den Vordergrund
@@ -31,7 +31,7 @@ for i = 1:10000
   [x_det,y_det] = sens.detection(obj_newx,obj_newy); %detection
   [x_det2,y_det2] = sens2.detection(obj_newx,obj_newy); %detection
   hold on
-  hplot = plot(xl_new,yl_new,'g*',xr_new,yr_new,'g*',obj_newx,obj_newy,'r*',x_det,y_det,'bx',x_det2,y_det2,'bx'); % plot
+  hplot = plot(xl_new,yl_new,'g-',xr_new,yr_new,'g-',obj_newx,obj_newy,'r*',x_det,y_det,'bx',x_det2,y_det2,'bx'); % plot
 
  uistack(kreisplot) %kreisbogen in den Vordergrund
    uistack(kreisplot)%kreisbogen in den Vordergrund

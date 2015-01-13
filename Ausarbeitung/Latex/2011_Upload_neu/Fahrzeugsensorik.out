@@ -1,7 +1,20 @@
 \BOOKMARK [0][-]{chapter.1}{Einleitung}{}% 1
 \BOOKMARK [1][-]{section.1.1}{Struktur}{chapter.1}% 2
-\BOOKMARK [0][-]{chapter.2}{Simulation der Fahrt und Sensoren}{}% 3
-\BOOKMARK [1][-]{section.2.1}{Animation der Fahrt}{chapter.2}% 4
-\BOOKMARK [2][-]{subsection.2.1.1}{Koordinatentransformation}{section.2.1}% 5
-\BOOKMARK [0][-]{appendix.A}{Quelltexte}{}% 6
-\BOOKMARK [0][-]{appendix*.2}{Literaturverzeichnis}{}% 7
+\BOOKMARK [0][-]{chapter.2}{Erstellung der Strecke und Umgebung}{}% 3
+\BOOKMARK [1][-]{section.2.1}{Aufbereitung der Kartendaten}{chapter.2}% 4
+\BOOKMARK [1][-]{section.2.2}{Interpolation}{chapter.2}% 5
+\BOOKMARK [1][-]{section.2.3}{Objektplatzierung}{chapter.2}% 6
+\BOOKMARK [0][-]{chapter.3}{Die Fahrt}{}% 7
+\BOOKMARK [1][-]{section.3.1}{Step-Funktion}{chapter.3}% 8
+\BOOKMARK [1][-]{section.3.2}{Animation der Fahrt}{chapter.3}% 9
+\BOOKMARK [2][-]{subsection.3.2.1}{Koordinatentransformation}{section.3.2}% 10
+\BOOKMARK [0][-]{chapter.4}{Visualisierung in 3D}{}% 11
+\BOOKMARK [1][-]{section.4.1}{Generelle Einf\374hrung in Virtual Reality}{chapter.4}% 12
+\BOOKMARK [2][-]{subsection.4.1.1}{VRealm Builder}{section.4.1}% 13
+\BOOKMARK [1][-]{section.4.2}{Erstellung der Strecke}{chapter.4}% 14
+\BOOKMARK [1][-]{section.4.3}{Automatisches einf\374gen und platzieren von Objekten \(Aerospace Toolbox in Matlab\)}{chapter.4}% 15
+\BOOKMARK [1][-]{section.4.4}{Animation des Fahrzeugs}{chapter.4}% 16
+\BOOKMARK [0][-]{chapter.5}{Simulation der Sensoren}{}% 17
+\BOOKMARK [1][-]{section.5.1}{Allgemeine Inforamtionen zu den betrachteten Sensoren}{chapter.5}% 18
+\BOOKMARK [0][-]{appendix.A}{Quelltexte}{}% 19
+\BOOKMARK [0][-]{appendix*.4}{Literaturverzeichnis}{}% 20

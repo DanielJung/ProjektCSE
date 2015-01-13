@@ -20,10 +20,11 @@ classdef Nullverschiebung
            this.xl = xl;
            this.yl = yl;
            this.frame = frame;
-           [this.x_bezug,this.y_bezug] = this.getShift(this.x_curr,this.y_curr,this.xr(this.frame),this.yr(this.frame));
+           [this.x_bezug,this.y_bezug] = this.getShift(x_curr,y_curr,this.xr(this.frame),this.yr(this.frame));
        
            
        end
+       
        
        function  [x_new,y_new] = getShift(this,x_curr,y_curr,x,y)
             %% VERSCHIEBUNG
@@ -31,13 +32,11 @@ classdef Nullverschiebung
 
             x_new = zeros(length(x),1);
             y_new = zeros(length(x),1);
-
-            moveNorm = norm([x_curr,y_curr]);
-            moveAng = atan2((x_curr),(y_curr));
-
+         
+             
             for i=1:length(x)
-            x_new(i) = x(i) - (moveNorm * sin(moveAng));
-            y_new(i) = y(i) - (moveNorm * cos(moveAng));
+            x_new(i) = x(i) - x_curr;
+            y_new(i) = y(i) - y_curr;
             end
       
       end
