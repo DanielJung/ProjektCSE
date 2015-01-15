@@ -52,7 +52,7 @@ function guiObjektplatz_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to guiObjektplatz (see VARARGIN)
 
-A = xlsread('VonUnibisRatio.xlsx','Tabelle4');
+A = xlsread('koordinaten.xlsx');
 x=A(1:10:end,1);
 y=A(1:10:end,2);
 s = street(x,y,.01);
