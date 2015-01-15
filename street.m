@@ -27,6 +27,7 @@ classdef street
             this.CoeffMatX      = getSplineCoefficients(this.Time, x, 0, 0);
             this.CoeffMatY      = getSplineCoefficients(this.Time, y, 0, 0);
             this.RadRotation    = 0;
+            this.Rotation       = 0;
             this.dCoeffMatX     = diffCoeffMat(this.CoeffMatX);
             this.dCoeffMatY     = diffCoeffMat(this.CoeffMatY);
         end

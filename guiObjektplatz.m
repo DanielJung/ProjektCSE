@@ -62,6 +62,7 @@ zoom on;
 
 
 
+
 % Choose default command line output for guiObjektplatz
 handles.output = hObject;
 
@@ -86,11 +87,12 @@ varargout{1} = handles.output;
 % --- Executes on button press in objpos.
 function objpos_Callback(hObject, eventdata, handles)
 
-[x,y] = ginput(1);
-set(handles.xtext,'String',strcat('x = ',num2str(x)));
-set(handles.ytext,'String',strcat('y = ',num2str(y)));
+[x_w,y_w] = ginput(1);
+set(handles.xtext,'String',strcat('x = ',num2str(x_w)));
+set(handles.ytext,'String',strcat('y = ',num2str(y_w)));
 hold on
 plot(x,y,'r*')
+
 % hObject    handle to objpos (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)

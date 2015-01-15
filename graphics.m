@@ -46,7 +46,7 @@ end
 function this = placeNodes2(this,xzuf,yzuf)   
     %[this.xzuf,this.yzuf] = this.s.getRandomPoints(100,100,100) % HIER getrandompoints verwenden
            
- for i = 1:500
+ for i = 1:length(xzuf);
                tree = vrnode(this.world,strcat('baumtree',num2str(i))); 
                %tree.scale = [0.02 0.02 0.02];
                tree.translation = [xzuf(i) 1 yzuf(i)];
@@ -81,7 +81,7 @@ function this = movecar(this,carname)
                  a=20;
  for i=1:this.s.NumSteps/a
     this.s = this.s.step(a);
-    
+ 
     car.translation = this.s.getPosition();
     car.rotation = [0 -1 0 this.s.getRotation()];
     RadVR.rotation = [0 0 1 -this.s.getRadRotation()];

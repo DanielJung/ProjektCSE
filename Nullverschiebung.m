@@ -9,10 +9,11 @@ classdef Nullverschiebung
        yr   %Straﬂe rechts Y
        xl   %Straﬂe links X
        yl   %Straﬂe links Y
+       winkel % Winkel des Autos
          
      end
    methods
-       function this = Nullverschiebung(x_curr,y_curr,xr,yr,xl,yl,frame)
+       function this = Nullverschiebung(x_curr,y_curr,xr,yr,xl,yl,frame,winkel)
            this.x_curr = x_curr;
            this.y_curr = y_curr;
            this.xr = xr;
@@ -21,7 +22,7 @@ classdef Nullverschiebung
            this.yl = yl;
            this.frame = frame;
            [this.x_bezug,this.y_bezug] = this.getShift(x_curr,y_curr,this.xr(this.frame),this.yr(this.frame));
-       
+            this.winkel = winkel;
            
        end
        
@@ -41,7 +42,7 @@ classdef Nullverschiebung
       
       end
        
-      function [x_gedr,y_gedr] = getSystemrotation(this,x_bezug,y_bezug,x,y)
+      function [x_gedr,y_gedr] = getSystemrotation(this,x,y)
         %% Drehung des Systems um einen Bezugswinkel 
                % Bezugswinkel definiert als Winkel zw. Bezugspunkt und
                % x-Achse
@@ -49,7 +50,7 @@ classdef Nullverschiebung
                x_gedr = zeros(length(x),1);
                y_gedr = zeros(length(x),1);
                
-               alpha1 = -atan2(y_bezug,x_bezug); %Bezugswinkel
+               alpha1 = this.winkel; %Bezugswinkel
                
                R1 = [cos(alpha1),-sin(alpha1);sin(alpha1),cos(alpha1)]; %Rotationsmatrix
                
@@ -80,15 +81,13 @@ classdef Nullverschiebung
     
                 [xl_new(i),yl_new(i)] = this.getShift(this.x_curr,this.y_curr,this.xl(this.frame+i-1),this.yl(this.frame+i-1));
                 [xr_new(i),yr_new(i)] = this.getShift(this.x_curr,this.y_curr,this.xr(this.frame+i-1),this.yr(this.frame+i-1));
-                [xl_gedr(i),yl_gedr(i)] = this.getSystemrotation(this.x_bezug,this.y_bezug,xl_new(i),yl_new(i));
-                [xr_gedr(i),yr_gedr(i)] = this.getSystemrotation(this.x_bezug,this.y_bezug,xr_new(i),yr_new(i));
+                [xl_gedr(i),yl_gedr(i)] = this.getSystemrotation(xl_new(i),yl_new(i));
+                [xr_gedr(i),yr_gedr(i)] = this.getSystemrotation(xr_new(i),yr_new(i));
            end
         
       
       end
-      function bezug = getBezug(this)
-                bezug = [this.x_bezug;this.y_bezug];
-      end
+    
       function [x_neu,y_neu] = centerOther (this,x_oth,y_oth)
          % Vektoren definieren
          x_neu = zeros(length(x_oth),1);
@@ -98,7 +97,7 @@ classdef Nullverschiebung
          
           for i=1:length(x_oth)
               [x_temp(i),y_temp(i)] = this.getShift(this.x_curr,this.y_curr,x_oth(i),y_oth(i));
-              [x_neu(i),y_neu(i)] = this.getSystemrotation(this.x_bezug,this.y_bezug,x_temp(i),y_temp(i));       
+              [x_neu(i),y_neu(i)] = this.getSystemrotation(x_temp(i),y_temp(i));       
           end
           
       end
