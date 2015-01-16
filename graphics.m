@@ -10,7 +10,7 @@ classdef graphics
             
 function this = graphics(wrldateiname,Baumanzahl,x,y,dt)
              this.Baumanzahl=Baumanzahl;
-             this.s = street(x,y,dt);
+             this.s = Street(x,y,dt);
              this.WRLdateiname = wrldateiname;
              this.world = vrworld(wrldateiname);
              

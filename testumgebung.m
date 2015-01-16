@@ -5,7 +5,7 @@ x=A(1:10:end,1);
 y=A(1:10:end,2);
 
 
-s = street(x,y,.01);
+s = Street(x,y,.01);
 umgebung = Umgebung(s);
 umgebung = umgebung.putObject('baum',1842,1250,'Standing','Pedestrian','Unknown');
 umgebung = umgebung.putObject('leitplanke',83,157,'Standing','Pedestrian','Unknown');
@@ -26,6 +26,7 @@ umgebung = umgebung.putRandomObject(40,10,10);
   vrdrawnow;
 
 [~, x, y, xr, yr, xl, yl] = s.getRouting(4);
+
 SMPC = Sensorik(70,23,0.01); %Sensorobjekt hinzufï¿½gen
 RADAR = Sensorik(240,9,0.01); %Sensorobjekt hinzufï¿½gen
 [x2,y2,x1,y1,zx2,zy2,zx1,zy1] = SMPC.Sensordarstellung(); % Kreisbogen erstellen
@@ -41,17 +42,14 @@ set(gca,'XDir','reverse');
      
     
 for i = 1:10000
-<<<<<<< HEAD
+
   winkel = -s.getRotation()-pi/2;
   curr=s.getPosition2D(); % aktuelle Position
+
   ver=Nullverschiebung(curr(1),curr(2),xr,yr,xl,yl,s.getFrame(),winkel); %Klasse aufrufen
   [xr_new,yr_new,xl_new,yl_new] = ver.centerStreet(200); % neue Straße ermitteln (Koordinaten)
-=======
-  curr=s.getPosition2D();
-  curr_rand= s.getRightLimit();                         % aktuelle Position
-  ver=Nullverschiebung(curr(1),curr(2),xr,yr,xl,yl,s.getFrame(),curr_rand(1),curr_rand(2)); %Klasse aufrufen
-  [xr_new,yr_new,xl_new,yl_new] = ver.centerStreet(100); % neue Straï¿½e ermitteln (Koordinaten)
->>>>>>> 412424de59bceb158b6ce765f992956958a65122
+
+
   [obj_newx,obj_newy] = ver.centerOther(umgebung.koordinatenarray(:,1),umgebung.koordinatenarray(:,2)); %neue Objekte ermitteln (Koordinaten)
   [x_det,y_det] = SMPC.detection(obj_newx,obj_newy); %detection
   [x_det2,y_det2] = RADAR.detection(obj_newx,obj_newy); %detection
@@ -64,14 +62,14 @@ for i = 1:10000
  
 
 axis([-75 75 0 500]);
-    koo = umgebung.getCoords()
+    koo = umgebung.getCoords();
     g.placeNodes2(koo(:,1),koo(:,2));
-    car.translation = s.getPosition();
+    car.translation = s.getPosition3D();
     car.rotation = [0 -1 0 s.getRotation()];
-    RadVR.rotation = [0 0 1 -s.getRadRotation()];
-    RadHR.rotation = [0 0 1 -s.getRadRotation()];
-    RadVL.rotation = [0 0 1 -s.getRadRotation()];
-    RadHL.rotation = [0 0 1 -s.getRadRotation()];
+    RadVR.rotation = [0 0 1 -s.getWheelRotation()];
+    RadHR.rotation = [0 0 1 -s.getWheelRotation()];
+    RadVL.rotation = [0 0 1 -s.getWheelRotation()];
+    RadHL.rotation = [0 0 1 -s.getWheelRotation()];
     drawnow;    
     vrdrawnow;
     

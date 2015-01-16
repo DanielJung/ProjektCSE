@@ -2,10 +2,9 @@ classdef Nullverschiebung
      properties (GetAccess=public)
        x_curr % Momentanposition Auto X
        y_curr % Momentanposition Auto Y
-       x_bezug % Bezugspunkt (rechter straï¿½enrand) X
-       y_bezug % Bezugspunkt (rechter straï¿½enrand) Y
+       x_bezug % Bezugspunkt (rechter straßenrand) X
+       y_bezug % Bezugspunkt (rechter straßenrand) Y
        frame % bei welchem frame es gerade ist
-<<<<<<< HEAD
        xr  %Straße rechts X
        yr   %Straße rechts Y
        xl   %Straße links X
@@ -15,16 +14,6 @@ classdef Nullverschiebung
      end
    methods
        function this = Nullverschiebung(x_curr,y_curr,xr,yr,xl,yl,frame,winkel)
-=======
-       xr  %Straï¿½e rechts X
-       yr   %Straï¿½e rechts Y
-       xl   %Straï¿½e links X
-       yl   %Straï¿½e links Y
-         
-     end
-   methods
-       function this = Nullverschiebung(x_curr,y_curr,xr,yr,xl,yl,frame,xbez,ybez)
->>>>>>> 412424de59bceb158b6ce765f992956958a65122
            this.x_curr = x_curr;
            this.y_curr = y_curr;
            this.xr = xr;
@@ -32,13 +21,8 @@ classdef Nullverschiebung
            this.xl = xl;
            this.yl = yl;
            this.frame = frame;
-<<<<<<< HEAD
            [this.x_bezug,this.y_bezug] = this.getShift(x_curr,y_curr,this.xr(this.frame),this.yr(this.frame));
             this.winkel = winkel;
-=======
-           [this.x_bezug,this.y_bezug] = this.getShift(x_curr,y_curr,xbez,ybez);
-       
->>>>>>> 412424de59bceb158b6ce765f992956958a65122
            
        end
        
@@ -65,10 +49,9 @@ classdef Nullverschiebung
                
                x_gedr = zeros(length(x),1);
                y_gedr = zeros(length(x),1);
+                                      
                
-               alpha1 = this.winkel; %Bezugswinkel
-               
-               R1 = [cos(alpha1),-sin(alpha1);sin(alpha1),cos(alpha1)]; %Rotationsmatrix
+               R1 = [cos(this.winkel),-sin(this.winkel);sin(this.winkel),cos(this.winkel)]; %Rotationsmatrix
                
                for i = 1: length(x)
                     a=(R1*([x(i);y(i)]))';          % Ermittlung gedrehter Koordinaten
@@ -79,7 +62,7 @@ classdef Nullverschiebung
       end
        
       function [xr_gedr,yr_gedr,xl_gedr,yl_gedr] = centerStreet(this,n)
-         % n = anzahl der berechneten Straï¿½enpunkte
+         % n = anzahl der berechneten Straßenpunkte
           
           %%Vektoren erstellen
             xl_new = zeros(n,1);

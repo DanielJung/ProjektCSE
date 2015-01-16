@@ -1,4 +1,4 @@
-classdef street
+classdef Street < handle
     
     properties (GetAccess=public)
         CoeffMatX   % Coefficient-Matrix for X-Axis
@@ -8,7 +8,7 @@ classdef street
         Time        % Time-Interval
         DeltaT      % Time-Step
         NumSteps    % Number of Steps
-        RadRotation % Rotationvom Rad
+        WheelRot    % Rotationvom Rad
         CurTime     % Current Time
         CurPos      % Current Position
         Rotation    % Current Rotation
@@ -16,32 +16,43 @@ classdef street
     end
     
     methods
-        function this=street(x, y, dt)
+        function this=Street(x, y, dt)
             this.Time           = 0:length(x)-1;
             this.DeltaT         = dt;
             this.CurTime        = 0;
             this.NumSteps       = (length(this.Time)-1)/this.DeltaT;
             this.CurPos(1)      = x(1);
             this.CurPos(2)      = y(1);
+            this.Rotation       = 0;
             this.frame          = 1;
             this.CoeffMatX      = getSplineCoefficients(this.Time, x, 0, 0);
             this.CoeffMatY      = getSplineCoefficients(this.Time, y, 0, 0);
-            this.RadRotation    = 0;
-            this.Rotation       = 0;
+            this.WheelRot       = 0;
             this.dCoeffMatX     = diffCoeffMat(this.CoeffMatX);
             this.dCoeffMatY     = diffCoeffMat(this.CoeffMatY);
         end
         function this=step(this, v)
-            this.CurTime = this.CurTime + this.DeltaT*v;
             dx = evalSpline(this.dCoeffMatX, this.Time, this.CurTime);
             dy = evalSpline(this.dCoeffMatY, this.Time, this.CurTime);
+            %abs = norm([dx, dy]);
+%             
+%             this.CurTime = this.CurTime + this.DeltaT*v/abs;
+%             
+%             
+%             this.CurPos(1) = this.CurPos(1)+v*this.DeltaT*dx/abs;
+%             this.CurPos(2) = this.CurPos(2)+v*this.DeltaT*dy/abs;
+            
+            
+            this.CurTime = this.CurTime + this.DeltaT*v;
+            
+            
             this.CurPos(1) = this.CurPos(1)+v*this.DeltaT*dx;
             this.CurPos(2) = this.CurPos(2)+v*this.DeltaT*dy;
             this.Rotation = atan2(dy, dx)-pi;
             this.frame  = this.frame+v;
-             this.RadRotation = this.RadRotation +2*v ;
-            if  (this.RadRotation == 360)
-                this.RadRotation = 0;
+            this.WheelRot = this.WheelRot +2*v ;
+            if  (this.WheelRot >= 360)
+                this.WheelRot = this.WheelRot-360;
             end
             
         end
@@ -87,7 +98,7 @@ classdef street
         function [x] = getPosition2D(this)
             x = [this.CurPos(1), this.CurPos(2)];
         end
-        function [x] = getPosition(this)
+        function [x] = getPosition3D(this)
             x = [this.CurPos(1), 0.2590, this.CurPos(2)];
         end
         function [x, y] = getRightLimit(this)
@@ -109,8 +120,8 @@ classdef street
         function [a] = getRotation(this)
             a = this.Rotation;
         end
-         function [radr] = getRadRotation(this)
-            radr = this.RadRotation;
+        function [radr] = getWheelRotation(this)
+            radr = this.WheelRot;
         end
         function [b] = getFrame(this)
                 b = this.frame;
