@@ -54,6 +54,32 @@ for i = 1:10000
   [x_det,y_det] = SMPC.detection(obj_newx,obj_newy); %detection
   [x_det2,y_det2] = RADAR.detection(obj_newx,obj_newy); %detection
   hold on
+  
+  varPhi=0.1*pi/180;
+  varR=0.3;
+  j=1;
+  k=1;
+  c1=get_cov(10,10);
+  c2=get_cov(8,8);
+  cplot(j) = plot(0,0);
+  cplot2(k) = plot(0,0);
+  if length(x_det) >= 1
+  if det_prop(0.5)==1
+      for j=1:1:length(x_det)
+        cplot(j) =  draw_ellipse([x_det(j);y_det(j)],c1,'r','r');
+      end
+  end
+  end
+  if length(x_det2) >= 1
+      if det_prop(0.5)==1
+          for k=1:1:length(x_det2)
+          [phic2,rc2]=cart2pol(x_det2(k),y_det2(k));
+          c2=get_covP(rc2,phic2,varPhi,varR);
+          cplot2(k) = draw_ellipse([x_det2(k);y_det2(k)],c2,'b','b');
+          end
+      end
+  end
+  
   hplot = plot(xl_new,yl_new,'g',xr_new,yr_new,'g',obj_newx,obj_newy,'r*',x_det,y_det,'bx',x_det2,y_det2,'bx'); % plot
   set(gca,'XDir','reverse');
  uistack(kreisplot) %kreisbogen in den Vordergrund
@@ -75,6 +101,9 @@ axis([-75 75 0 500]);
     
    
     delete(hplot);
+    delete(cplot);
+    delete(cplot2);
+    
     s=s.step(1);
    
 end

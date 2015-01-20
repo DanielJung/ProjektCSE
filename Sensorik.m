@@ -76,7 +76,85 @@ end
 end
 
 end
+function det= det_prop(x)
+   %Funktion liefert Boolean ob Objekt detektiert oder nicht.
+  
+   detection=rand(1,1);
+   if detection <=x
+       % detection succesful
+       det = 1;
+   end
+   if detection >x
+       % detection failed
+       det = 0;
+   end
+       
+end 
+
+function [sigma_x,sigma_y]= var_sens(x,Sens)
+    %Funktion bekommt Abstand x und Sensorname und liefert die Varianzen
+    %ACHTUNG !!Ausgabe von SMPC in kartesischen Koordinaten, von Radar und Lidas
+    %Polarkoordinaten!!!
+  if STRCMP(Sens, 'SMPC') == 1
+  smpc_x = @(x) ( 1 / sqrt ( 5 ) ) * 0.2 / ( 0.2 * 1600 ) * x^2;
+  smpc_y = @(x) 5.5/1600*x;
+  sigma_x= smpc_x(x);
+  sigma_y= smpc_y(x);
+  end
+  
+  if STRCMP(Sens, 'SMPC-LR') == 1
+  smpc_LR_x = @(x) 1/sqrt(10)*0.2/(0.2 * 1600) * x^2;
+  smpc_LR_y = @(x) 0.00125*x;
+  sigma_x= smpc_LR_x(x);
+  sigma_y= smpc_LR_y(x);
+  end
+  
+  if STRCMP(Sens, 'RADAR') == 1
+  radar_x = 0.3;
+  radar_y = 0.1*pi/180; 
+  sigma_x= radar_x(x);
+  sigma_y= radar_y(x);
+  end
+  
+  if STRCMP(Sens, 'LIDAR') == 1
+  lidar_x =  0.2;
+  lidar_y =  0.15*pi/180;
+  sigma_x= lidar_x(x);
+  sigma_y= lidar_y(x);
+  end
+  
+ 
+  
+    
+    
+function [c] = get_cov(sigma_x,sigma_y)
+
+c = [sigma_x^2,0; 0, sigma_y^2];
 
 
 end
+function [var_kar] = get_covP(R,Phi,varPhi,varR)
+% Liefert Kovarianzmatrix von r,phi in x,y
+
+% % syms varR varPhi covRPhi real
+% % syms R Phi real
+% % x_t = [R*cos(Phi);R*sin(Phi)];
+% % 
+% % P = [ varR, 0; 0, varPhi ];
+% % J = jacobian(x_t, [ R, Phi]);
+% % var_kar = J * P * J';
+
+
+var_kar = ...
+[                 varPhi*R^2*sin(Phi)^2 + varR*cos(Phi)^2, - varPhi*cos(Phi)*sin(Phi)*R^2 + varR*cos(Phi)*sin(Phi); ...
+ - varPhi*cos(Phi)*sin(Phi)*R^2 + varR*cos(Phi)*sin(Phi),                 varPhi*R^2*cos(Phi)^2 + varR*sin(Phi)^2];
+
+
+
+end
+
+end
+   end
+
+   
 end
